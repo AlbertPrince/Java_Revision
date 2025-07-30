@@ -27,9 +27,9 @@ public class UserService {
     //     return repo.findById(id);
     // }
 
-    // public List<User> getAllUsers() {
-    //     return repo.findByDeletedFalse(); // Fetch only non-deleted users
-    // }
+    public List<User> getAllUsers() {
+        return repo.findAll(); // Fetch all users
+    }
 
     public List<User> saveAllUsers(List<User> users) {
         return repo.saveAll(users); 
@@ -64,7 +64,7 @@ public class UserService {
     }
 
     public Optional<User> updateUser(Long id, UserDTO userDto){
-        return repo.findById(id)
+        return repo.findByIdAndDeletedFalse(id)
                 .map(existingUser -> {
                     existingUser.setName(userDto.getName());
                     existingUser.setEmail(userDto.getEmail());
@@ -80,7 +80,7 @@ public class UserService {
     // }
 
     public void deleteUserById(Long id) {
-        repo.findById(id).ifPresent(user -> {
+        repo.findByIdAndDeletedFalse(id).ifPresent(user -> {
             user.setDeleted(true); // Mark as deleted instead of removing
             repo.save(user);
         });
