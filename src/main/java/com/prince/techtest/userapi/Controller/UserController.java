@@ -37,6 +37,14 @@ public class UserController {
         return ResponseEntity.ok(usersPage);
     }
 
+    @PostMapping("/bulk")
+    public ResponseEntity<List<User>> createUsers(@RequestBody @Valid List<UserDTO> userDTOs) {
+        List<User> users = userDTOs.stream()
+                .map(dto -> new User(dto.getName(), dto.getEmail()))
+                .toList();
+        return ResponseEntity.ok(userService.saveAllUsers(users));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)

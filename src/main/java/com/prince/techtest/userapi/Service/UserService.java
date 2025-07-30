@@ -31,6 +31,10 @@ public class UserService {
     //     return repo.findByDeletedFalse(); // Fetch only non-deleted users
     // }
 
+    public List<User> saveAllUsers(List<User> users) {
+        return repo.saveAll(users); 
+    }
+
     public Page<User> getUsersPaginated(Pageable pageable) {
         return repo.findByDeletedFalse(pageable); // Fetch non-deleted users with pagination
     }
