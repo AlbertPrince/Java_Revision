@@ -12,6 +12,9 @@ public class User {
 
     private String name;
     private String email;
+    
+    @Column(name = "deleted")
+    private boolean deleted = false;
 
     public User() {
     }
@@ -43,5 +46,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

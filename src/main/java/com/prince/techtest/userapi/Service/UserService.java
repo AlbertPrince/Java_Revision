@@ -16,12 +16,24 @@ public class UserService {
         this.repo = repo;
     }
 
+    // public List<User> getAllUsers() {
+    //     return repo.findAll();
+    // }
+
+    // public Optional<User> getUserById(Long id) {
+    //     return repo.findById(id);
+    // }
+
     public List<User> getAllUsers() {
-        return repo.findAll();
+        return repo.findByDeletedFalse(); // Fetch only non-deleted users
     }
 
     public Optional<User> getUserById(Long id) {
-        return repo.findById(id);
+        return repo.findByIdAndDeletedFalse(id); // Fetch non-deleted user by ID
+    }
+
+    public List<User> getDeletedUsers() {
+        return repo.findByDeletedTrue(); // Fetch only deleted users
     }
 
     public User saveUser(User user) {
@@ -37,10 +49,24 @@ public class UserService {
                 });
     }
 
+    // public void deleteUserById(Long id) {
+    //     if(!repo.existsById(id)) {
+    //         throw new IllegalArgumentException("User with id " + id + " does not exist.");
+    //     }
+    //     repo.deleteById(id);
+    // }
+
     public void deleteUserById(Long id) {
-        if(!repo.existsById(id)) {
-            throw new IllegalArgumentException("User with id " + id + " does not exist.");
-        }
-        repo.deleteById(id);
+        repo.findById(id).ifPresent(user -> {
+            user.setDeleted(true); // Mark as deleted instead of removing
+            repo.save(user);
+        });
+    }
+
+    public void restoreUserById(Long id) {
+        repo.findById(id).ifPresent(user -> {
+            user.setDeleted(false); // Restore the user
+            repo.save(user);
+        });
     }
 }

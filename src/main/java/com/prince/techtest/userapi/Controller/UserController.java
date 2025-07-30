@@ -50,9 +50,20 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/restore/{id}")
+    public ResponseEntity<Void> restoreUser(@PathVariable Long id){
+        userService.restoreUserById(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/deleted")
+    public List<User> getDeletedUsers() {
+        return userService.getDeletedUsers();
     }
 }
