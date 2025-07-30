@@ -3,6 +3,9 @@ package com.prince.techtest.userapi.Service;
 import com.prince.techtest.userapi.dto.UserDTO;
 import com.prince.techtest.userapi.model.User;
 import com.prince.techtest.userapi.repository.UserRepository;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,8 +27,12 @@ public class UserService {
     //     return repo.findById(id);
     // }
 
-    public List<User> getAllUsers() {
-        return repo.findByDeletedFalse(); // Fetch only non-deleted users
+    // public List<User> getAllUsers() {
+    //     return repo.findByDeletedFalse(); // Fetch only non-deleted users
+    // }
+
+    public Page<User> getUsersPaginated(Pageable pageable) {
+        return repo.findByDeletedFalse(pageable); // Fetch non-deleted users with pagination
     }
 
     public Optional<User> getUserById(Long id) {

@@ -6,6 +6,9 @@ import jakarta.validation.Valid;
 
 import com.prince.techtest.userapi.Service.UserService;
 import com.prince.techtest.userapi.dto.UserDTO;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +25,16 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    // @GetMapping
+    // public List<User> getAllUsers() {
+    //     return userService.getAllUsers();
+    // }
+
+    @GetMapping("/paginated")
+    public ResponseEntity<Page<User>> getUsersPaginated(@RequestParam(defaultValue = "0") int page,
+                                                                 @RequestParam(defaultValue = "10") int size) {
+        Page<User> usersPage = userService.getUsersPaginated(PageRequest.of(page, size));
+        return ResponseEntity.ok(usersPage);
     }
 
     @GetMapping("/{id}")
