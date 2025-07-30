@@ -43,6 +43,18 @@ public class UserService {
         return repo.findByIdAndDeletedFalse(id); // Fetch non-deleted user by ID
     }
 
+    public List<User> searchUsers(String name, String email){
+        if(name != null && !name.isEmpty() && email != null && !email.isEmpty()) {
+            return repo.findByNameContainingIgnoreCaseAndEmailContainingIgnoreCase(name, email);
+        } else if(name != null && !name.isEmpty()) {
+            return repo.findByNameContainingIgnoreCase(name);
+        } else if(email != null && !email.isEmpty()) {
+            return repo.findByEmailContainingIgnoreCase(email);
+        } else {
+            return repo.findAll(); // Return all users if no search criteria
+        }
+    }
+
     public List<User> getDeletedUsers() {
         return repo.findByDeletedTrue(); // Fetch only deleted users
     }
