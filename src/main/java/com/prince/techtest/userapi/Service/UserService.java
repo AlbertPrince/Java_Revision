@@ -38,6 +38,9 @@ public class UserService {
     }
 
     public void deleteUserById(Long id) {
+        if(!repo.existsById(id)) {
+            throw new IllegalArgumentException("User with id " + id + " does not exist.");
+        }
         repo.deleteById(id);
     }
 }

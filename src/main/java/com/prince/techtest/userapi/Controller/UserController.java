@@ -9,6 +9,7 @@ import com.prince.techtest.userapi.dto.UserDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -34,9 +35,12 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody @Valid UserDTO userDTO) {
+    public ResponseEntity<User> createUser(@RequestBody @Valid UserDTO userDTO) {
         User user = new User(userDTO.getName(), userDTO.getEmail());
-        return userService.saveUser(user);
+        User savedUser = userService.saveUser(user);
+
+        URI location = URI.create(String.format("/api/users/%s", savedUser.getId()));
+        return ResponseEntity.created(location).body(savedUser);
     }
 
     @PutMapping("/{id}")
